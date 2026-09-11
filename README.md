@@ -90,8 +90,6 @@ Warmup's job is to prevent large early updates from destabilizing training. The 
 
 ## Task 4: Cosine vs WSD
 
-## Task 4: Cosine vs WSD
-
 ### What I Did
 Trained the same model twice for 300 steps — once with cosine schedule, once with WSD — and compared losses at step 200.
 
@@ -105,10 +103,6 @@ Trained the same model twice for 300 steps — once with cosine schedule, once w
 ### Decision
 I would keep **WSD** because it achieved a lower loss (0.001016 vs 0.002143) at step 200. WSD keeps the learning rate stable during the "stable" phase (steps 20-200), which allows the model to continue learning at full speed. Cosine starts decaying immediately after warmup, so by step 200 its learning rate has already dropped significantly.
 
-### Plot
-![Cosine vs WSD](plots/task4_cosine_vs_wsd.png)
----
-
 ## Task 5: LR Sweep
 
 ### What I Did
@@ -118,9 +112,12 @@ Swept learning rates at widths 256, 512, and 1,024. Plotted loss against learnin
 
 | Width | Optimal LR | Loss |
 |-------|-----------|------|
-| 256 | [FILL IN] | [FILL IN] |
-| 512 | [FILL IN] | [FILL IN] |
-| 1024 | [FILL IN] | [FILL IN] |
+| 256 | 1e-1 | 0.000011 |
+| 512 | 3e-1 | 0.000000 |
+| 1024 | 1e-1 | 0.000000 |
+
+### Observation
+All three widths converge to near-zero loss at learning rates between 1e-1 and 3e-1. Larger widths tolerate larger learning rates before diverging — width 512 handles 3e-1, while width 1024 diverges at 3e-1 but works well at 1e-1.
 
 ### Plot
 ![LR Sweep](plots/task5_lr_sweep.png)
@@ -130,14 +127,22 @@ Swept learning rates at widths 256, 512, and 1,024. Plotted loss against learnin
 ## Task 6: Predict LR for Width 4096
 
 ### Prediction
-**Predicted LR: [FILL IN]**
+**Predicted LR: 1.44e-01**
 
 ### Confidence
-**[High / Medium / Low]**
+**Medium**
 
 ### Reasoning
-[FILL IN — explain how you extrapolated from the three minima and why you are confident or not]
+The power law fit gives `lr = 1.4422e-1 * width^0.0000`, meaning the exponent is essentially zero. This suggests the optimal learning rate is roughly **constant across widths** in this range — around 1e-1. With only 3 data points, all clustered in a narrow range (1e-1 to 3e-1), the extrapolation to width 4096 is uncertain. The power law may not hold at much larger widths, where the optimal LR could shift.
 
+**I would use 1.44e-01 for width 4096, but with medium confidence.**### Plot
+![Cosine vs WSD](plots/task4_cosine_vs_wsd.png)
 ---
+
+
+
+
+
+
 
 ## Repository Structure
