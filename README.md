@@ -90,6 +90,8 @@ Warmup's job is to prevent large early updates from destabilizing training. The 
 
 ## Task 4: Cosine vs WSD
 
+## Task 4: Cosine vs WSD
+
 ### What I Did
 Trained the same model twice for 300 steps — once with cosine schedule, once with WSD — and compared losses at step 200.
 
@@ -97,15 +99,14 @@ Trained the same model twice for 300 steps — once with cosine schedule, once w
 
 | Schedule | Loss at Step 200 |
 |----------|-----------------|
-| Cosine | [FILL IN] |
-| WSD | [FILL IN] |
+| Cosine | 0.002143 |
+| WSD | 0.001016 |
 
 ### Decision
-I would keep: **[Cosine / WSD]**
+I would keep **WSD** because it achieved a lower loss (0.001016 vs 0.002143) at step 200. WSD keeps the learning rate stable during the "stable" phase (steps 20-200), which allows the model to continue learning at full speed. Cosine starts decaying immediately after warmup, so by step 200 its learning rate has already dropped significantly.
 
 ### Plot
 ![Cosine vs WSD](plots/task4_cosine_vs_wsd.png)
-
 ---
 
 ## Task 5: LR Sweep
